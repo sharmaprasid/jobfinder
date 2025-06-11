@@ -12,12 +12,7 @@ import fileUpload from "express-fileupload";
 const app = express();
 config({ path: "./config/config.env" });
 
-app.use(
-  cors({
-    origin: "*",
-    methods: ["GET", "POST", "DELETE", "PUT", "OPTIONS"],
-  })
-);
+
 
 app.use(
   cors({
