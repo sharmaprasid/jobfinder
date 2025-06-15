@@ -17,7 +17,7 @@ const Login = () => {
 
   useEffect(() => {
     if (isAuthorized) {
-      navigate("/"); // Redirects after successful login
+      navigate("/"); 
     }
   }, [isAuthorized, navigate]);
 

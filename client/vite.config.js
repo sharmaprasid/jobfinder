@@ -7,7 +7,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'https://jobserver-l1v3oqimz-sharmaprasids-projects.vercel.app',
+        target: 'https://jobfinderserver.vercel.app/',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, '')
       }

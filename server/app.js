@@ -10,6 +10,7 @@ import cookieParser from "cookie-parser";
 import fileUpload from "express-fileupload";
 
 const app = express();
+dbConnection();
 config({ path: "./config/config.env" });
 
 
@@ -39,7 +40,7 @@ app.use(
 app.use("/api/v1/user", userRouter);
 app.use("/api/v1/job", jobRouter);
 app.use("/api/v1/application", applicationRouter);
-dbConnection();
+
 
 app.use(errorMiddleware);
 export default app;
