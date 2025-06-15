@@ -1,7 +1,7 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { MdOutlineMailOutline } from "react-icons/md";
 import { RiLock2Fill } from "react-icons/ri";
-import { Link, Navigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FaRegUser } from "react-icons/fa";
 import axios from "axios";
 import toast from "react-hot-toast";
@@ -13,9 +13,18 @@ const Login = () => {
   const [role, setRole] = useState("");
 
   const { isAuthorized, setIsAuthorized } = useContext(Context);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (isAuthorized) {
+      navigate("/"); // Redirects after successful login
+    }
+  }, [isAuthorized, navigate]);
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    if (!role) return toast.error("Please select a role.");
+
     try {
       const { data } = await axios.post(
         "https://jobfinderserver.vercel.app/api/v1/user/login",
@@ -25,8 +34,7 @@ const Login = () => {
             "Content-Type": "application/json",
           },
           withCredentials: true,
-        },
-        // console.log(data) // Log the response data for debugging;
+        }
       );
       toast.success(data.message);
       setEmail("");
@@ -34,70 +42,61 @@ const Login = () => {
       setRole("");
       setIsAuthorized(true);
     } catch (error) {
-      toast.error(error.response.data.message);
+      toast.error(error?.response?.data?.message || "Login failed");
     }
   };
 
-  if(isAuthorized){
-    return <Navigate to={'/'}/>
-  }
-
   return (
-    <>
-      <section className="authPage">
-        <div className="container">
-          <div className="header">
-            <img src="/careerconnect-black.png" alt="logo" />
-            <h3>Login to your account</h3>
+    <section className="authPage">
+      <div className="container">
+        <div className="header">
+          <img src="/careerconnect-black.png" alt="logo" />
+          <h3>Login to your account</h3>
+        </div>
+        <form onSubmit={handleLogin}>
+          <div className="inputTag">
+            <label>Login As</label>
+            <div>
+              <select value={role} onChange={(e) => setRole(e.target.value)}>
+                <option value="">Select Role</option>
+                <option value="Job Seeker">Job Seeker</option>
+                <option value="Employer">Employer</option>
+              </select>
+              <FaRegUser />
+            </div>
           </div>
-          <form>
-            <div className="inputTag">
-              <label>Login As</label>
-              <div>
-                <select value={role} onChange={(e) => setRole(e.target.value)}>
-                  <option value="">Select Role</option>
-                  
-                  <option value="Job Seeker">Job Seeker</option>
-                  <option value="Employer">Employer</option>
-                </select>
-                <FaRegUser />
-              </div>
+          <div className="inputTag">
+            <label>Email Address</label>
+            <div>
+              <input
+                type="email"
+                placeholder="Enter your email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+              <MdOutlineMailOutline />
             </div>
-            <div className="inputTag">
-              <label>Email Address</label>
-              <div>
-                <input
-                  type="email"
-                  placeholder="Enter your email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                />
-                <MdOutlineMailOutline />
-              </div>
+          </div>
+          <div className="inputTag">
+            <label>Password</label>
+            <div>
+              <input
+                type="password"
+                placeholder="Enter your Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+              <RiLock2Fill />
             </div>
-            <div className="inputTag">
-              <label>Password</label>
-              <div>
-                <input
-                  type="password"
-                  placeholder="Enter your Password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                />
-                <RiLock2Fill />
-              </div>
-            </div>
-            <button type="submit" onClick={handleLogin}>
-              Login
-            </button>
-            <Link to={"/register"}>Register Now</Link>
-          </form>
-        </div>
-        <div className="banner">
-          <img src="/login.png" alt="login" />
-        </div>
-      </section>
-    </>
+          </div>
+          <button type="submit">Login</button>
+          <Link to="/register">Register Now</Link>
+        </form>
+      </div>
+      <div className="banner">
+        <img src="/login.png" alt="login" />
+      </div>
+    </section>
   );
 };
 
