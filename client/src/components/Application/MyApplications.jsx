@@ -18,7 +18,7 @@ const MyApplications = () => {
     try {
       if (user && user.role === "Employer") {
         axios
-          .get("https://jobserver-l1v3oqimz-sharmaprasids-projects.vercel.app/api/v1/application/employer/getall", {
+          .get("https://jobfinderserver.vercel.app/api/v1/application/employer/getall", {
             withCredentials: true,
           })
           .then((res) => {

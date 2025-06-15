@@ -23,7 +23,7 @@ const App = () => {
     const fetchUser = async () => {
       try {
         const response = await axios.get(
-          "https://jobserver-l1v3oqimz-sharmaprasids-projects.vercel.app/api/v1/user/getuser",
+          "https://jobfinderserver.vercel.app/api/v1/user/getuser",
           {
             withCredentials: true,
           }
