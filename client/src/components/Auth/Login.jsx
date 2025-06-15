@@ -26,7 +26,7 @@ const Login = () => {
           },
           withCredentials: true,
         },
-        console.log(data) // Log the response data for debugging;
+        // console.log(data) // Log the response data for debugging;
       );
       toast.success(data.message);
       setEmail("");
