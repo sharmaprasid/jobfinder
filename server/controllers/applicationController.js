@@ -96,7 +96,7 @@ export const postApplication = catchAsyncErrors(async (req, res, next) => {
       return next(new ErrorHandler("File upload service configuration error", 500));
     }
     
-    // Handle any other errors
+   
     return next(error);
   }
 });
