@@ -14,7 +14,7 @@ const app = express();
 
 config({ path: "./config/config.env" });
 
-dbConnection();
+await dbConnection();
 cloudinary.v2.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME, // CLOUDINARY_CLIENT_NAME
   api_key: process.env.CLOUDINARY_API_KEY,       // CLOUDINARY_CLIENT_API
