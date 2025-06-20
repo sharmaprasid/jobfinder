@@ -19,23 +19,42 @@ import MyJobs from "./components/Job/MyJobs";
 
 const App = () => {
   const { isAuthorized, setIsAuthorized, setUser } = useContext(Context);
+  // useEffect(() => {
+  //   const fetchUser = async () => {
+  //     try {
+  //       const response = await axios.get(
+  //         "https://jobfinderserver.vercel.app/api/v1/user/getuser",
+  //         {
+  //           withCredentials: true,
+  //         }
+  //       );
+  //       setUser(response.data.user);
+  //       setIsAuthorized(true);
+  //     } catch (error) {
+  //       setIsAuthorized(false);
+  //     }
+  //   };
+  //   fetchUser();
+  // }, [isAuthorized]);
   useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const response = await axios.get(
-          "https://jobfinderserver.vercel.app/api/v1/user/getuser",
-          {
-            withCredentials: true,
-          }
-        );
-        setUser(response.data.user);
-        setIsAuthorized(true);
-      } catch (error) {
-        setIsAuthorized(false);
-      }
-    };
-    fetchUser();
-  }, [isAuthorized]);
+  const fetchUser = async () => {
+    try {
+      const response = await axios.get(
+        "https://jobfinderserver.vercel.app/api/v1/user/getuser",
+        {
+          withCredentials: true,
+        }
+      );
+      setUser(response.data.user);
+      setIsAuthorized(true);
+    } catch (error) {
+      setIsAuthorized(false);
+    }
+  };
+
+  fetchUser();
+}, []); // run only once on app mount
+
 
   return (
     <>
