@@ -13,12 +13,12 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-        .animate-marquee {
-          animation: scroll 4s linear infinite;
+       .animate-slide {
+          animation: slideLeft 4s linear infinite;
         }
 
-        @keyframes scroll {
-          0% { transform: translateX(100%); }
+        @keyframes slideLeft {
+          0% { transform: translateX(0); }
           100% { transform: translateX(-100%); }
         }
       
