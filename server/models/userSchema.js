@@ -1,7 +1,32 @@
-import mongoose from "mongoose";
-import validator from "validator";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import mongoose from "mongoose";
+import validator from "validator";
+
+const companySchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: [true, "Company name is required"],
+  },
+  location: {
+    type: String,
+    required: [true, "Company location is required"],
+  },
+  industry: {
+    type: String,
+    default: "General",
+  },
+  website: {
+    type: String,
+    validate: {
+      validator: function (v) {
+        return v === "" || validator.isURL(v);
+      },
+      message: "Invalid URL format for website",
+    },
+  },
+});
+
 const userSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -30,12 +55,19 @@ const userSchema = new mongoose.Schema({
     required: [true, "Please select a role"],
     enum: ["Job Seeker", "Employer"],
   },
+
+  company: {
+    type: companySchema,
+    required: function () {
+      return this.role === "Employer";
+    },
+  },
+
   createdAt: {
     type: Date,
     default: Date.now,
   },
 });
-
 
 //ENCRYPTING THE PASSWORD WHEN THE USER REGISTERS OR MODIFIES HIS PASSWORD
 userSchema.pre("save", async function (next) {
@@ -50,7 +82,7 @@ userSchema.methods.comparePassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
 };
 
-//GENERATING A JWT TOKEN WHEN A USER REGISTERS OR LOGINS, IT DEPENDS ON OUR CODE THAT WHEN DO WE NEED TO GENERATE THE JWT TOKEN WHEN THE USER LOGIN OR REGISTER OR FOR BOTH. 
+//GENERATING A JWT TOKEN WHEN A USER REGISTERS OR LOGINS, IT DEPENDS ON OUR CODE THAT WHEN DO WE NEED TO GENERATE THE JWT TOKEN WHEN THE USER LOGIN OR REGISTER OR FOR BOTH.
 userSchema.methods.getJWTToken = function () {
   return jwt.sign({ id: this._id }, process.env.JWT_SECRET_KEY, {
     expiresIn: process.env.JWT_EXPIRE,

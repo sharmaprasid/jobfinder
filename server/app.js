@@ -9,6 +9,7 @@ import { errorMiddleware } from "./middlewares/error.js";
 import cookieParser from "cookie-parser";
 import fileUpload from "express-fileupload";
 import cloudinary from "cloudinary";
+import companyRouter from "./routes/companyRoutes.js";
 
 const app = express();
 
@@ -35,7 +36,7 @@ app.get("/", (req, res) => {
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
+app.use("/api/v1/company", companyRouter);
 app.use(
   fileUpload({
     useTempFiles: true,
