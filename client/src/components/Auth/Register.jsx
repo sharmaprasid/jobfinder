@@ -21,7 +21,7 @@ const Register = () => {
   const [industry, setIndustry] = useState("");
   const [website, setWebsite] = useState("");
 
-  const { isAuthorized, setIsAuthorized } = useContext(Context);
+  const { isAuthorized, setIsAuthorized, user, setUser } = useContext(Context);
 
   const handleRegister = async (e) => {
     e.preventDefault();
@@ -70,7 +70,7 @@ const Register = () => {
   };
 
   if (isAuthorized) {
-    return <Navigate to="/" />;
+    return <Navigate to={'/'} />;
   }
 
   return (
