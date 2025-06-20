@@ -53,7 +53,7 @@ const App = () => {
   };
 
   fetchUser();
-}, []); // run only once on app mount
+}, [isAuthorized]); // run only once on app mount
 
 
   return (
