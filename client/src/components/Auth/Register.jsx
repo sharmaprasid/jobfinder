@@ -46,7 +46,7 @@ const Register = () => {
 
     try {
       const { data } = await axios.post(
-        `${import.meta.env.VITE_APP_API_URL}/user/register`,
+        `https://jobfinderserver.vercel.app/api/v1/user/register`,
         userData,
         {
           headers: { "Content-Type": "application/json" },
