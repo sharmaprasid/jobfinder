@@ -1,10 +1,10 @@
-import React, { useContext, useState } from "react";
-import { Context } from "../../main";
-import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { useContext, useState } from "react";
 import toast from "react-hot-toast";
-import { GiHamburgerMenu } from "react-icons/gi";
 import { AiOutlineClose } from "react-icons/ai"; // Import the close icon
+import { GiHamburgerMenu } from "react-icons/gi";
+import { Link, useNavigate } from "react-router-dom";
+import { Context } from "../../main";
 
 const Navbar = () => {
   const [show, setShow] = useState(false);
@@ -13,12 +13,9 @@ const Navbar = () => {
 
   const handleLogout = async () => {
     try {
-      const response = await axios.get(
-        "https://jobfinderserver.vercel.app/api/v1/user/logout",
-        {
-          withCredentials: true,
-        }
-      );
+      const response = await axios.get(`https://jobfinderserver.vercel.app//user/logout`, {
+        withCredentials: true,
+      });
       toast.success(response.data.message);
       setIsAuthorized(false);
       navigateTo("/login");
@@ -46,9 +43,7 @@ const Navbar = () => {
           </li>
           <li>
             <Link to={"/applications/me"} onClick={() => setShow(false)}>
-              {user && user.role === "Employer"
-                ? "APPLICANT'S APPLICATIONS"
-                : "MY APPLICATIONS"}
+              {user && user.role === "Employer" ? "APPLICANT'S APPLICATIONS" : "MY APPLICATIONS"}
             </Link>
           </li>
           {user && user.role === "Employer" ? (
