@@ -16,7 +16,7 @@ import Footer from "./components/Layout/Footer";
 import Navbar from "./components/Layout/Navbar";
 import NotFound from "./components/NotFound/NotFound";
 import { Context } from "./main";
-import Profile from "./components/profile/Profile";
+import Profile from "./components/Profile/Profile";
 
 const App = () => {
   const { isAuthorized, setIsAuthorized, setUser } = useContext(Context);
