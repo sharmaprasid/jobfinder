@@ -1,5 +1,4 @@
-import React from "react";
-import { FaBuilding, FaSuitcase, FaUsers, FaUserPlus } from "react-icons/fa";
+import { FaBuilding, FaSuitcase, FaUserPlus, FaUsers } from "react-icons/fa";
 
 const HeroSection = () => {
   const details = [
@@ -33,12 +32,11 @@ const HeroSection = () => {
       <div className="heroSection">
         <div className="container">
           <div className="title">
-            <h1>Find a job that suits</h1>
-            <h1>your interests and skills</h1>
+            <h3>Find a job that suits</h3>
+            <h3>your interests and skills</h3>
             <p>
-              Discover job opportunities that match your skills and passions.
-              Connect with employers seeking talent like yours for rewarding
-              careers.
+              Discover job opportunities that match your skills and passions. Connect with employers
+              seeking talent like yours for rewarding careers.
             </p>
           </div>
           <div className="image">

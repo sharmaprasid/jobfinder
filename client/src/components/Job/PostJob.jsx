@@ -1,8 +1,22 @@
-import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
+import { useContext, useState } from "react";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { Context } from "../../main";
+
+const categories = [
+  "Graphics & Design",
+  "Mobile App Development",
+  "Frontend Web Development",
+  "Business Development Executive",
+  "Account & Finance",
+  "Artificial Intelligence",
+  "Video Animation",
+  "MEAN Stack Development",
+  "MERN Stack Development",
+  "Data Entry Operator",
+];
+
 const PostJob = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -31,7 +45,7 @@ const PostJob = () => {
     }
     await axios
       .post(
-        "https://jobfinderserver.vercel.app/api/v1/job/post",
+        `${import.meta.env.VITE_APP_API_URL}/job/post`,
         fixedSalary.length >= 4
           ? {
               title,
@@ -61,6 +75,7 @@ const PostJob = () => {
       )
       .then((res) => {
         toast.success(res.data.message);
+        navigateTo("/job/me");
       })
       .catch((err) => {
         toast.error(err.response.data.message);
@@ -85,33 +100,13 @@ const PostJob = () => {
                 onChange={(e) => setTitle(e.target.value)}
                 placeholder="Job Title"
               />
-              <select
-                value={category}
-                onChange={(e) => setCategory(e.target.value)}
-              >
+              <select value={category} onChange={(e) => setCategory(e.target.value)}>
                 <option value="">Select Category</option>
-                <option value="Graphics & Design">Graphics & Design</option>
-                <option value="Mobile App Development">
-                  Mobile App Development
-                </option>
-                <option value="Frontend Web Development">
-                  Frontend Web Development
-                </option>
-                <option value="Business Development Executive">
-                Business Development Executive
-                </option>
-                <option value="Account & Finance">Account & Finance</option>
-                <option value="Artificial Intelligence">
-                  Artificial Intelligence
-                </option>
-                <option value="Video Animation">Video Animation</option>
-                <option value="MEAN Stack Development">
-                  MEAN STACK Development
-                </option>
-                <option value="MERN Stack Development">
-                  MERN STACK Development
-                </option>
-                <option value="Data Entry Operator">Data Entry Operator</option>
+                {categories.map((cat) => (
+                  <option key={cat} value={cat}>
+                    {cat}
+                  </option>
+                ))}
               </select>
             </div>
             <div className="wrapper">
@@ -135,10 +130,7 @@ const PostJob = () => {
               placeholder="Location"
             />
             <div className="salary_wrapper">
-              <select
-                value={salaryType}
-                onChange={(e) => setSalaryType(e.target.value)}
-              >
+              <select value={salaryType} onChange={(e) => setSalaryType(e.target.value)}>
                 <option value="default">Select Salary Type</option>
                 <option value="Fixed Salary">Fixed Salary</option>
                 <option value="Ranged Salary">Ranged Salary</option>

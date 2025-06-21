@@ -14,6 +14,8 @@ const AppWrapper = () => {
     <Context.Provider
       value={{
         isAuthorized,
+        isEmployer: user.role === "Employer",
+        isJobSeeker: user.role === "Job Seeker",
         setIsAuthorized,
         user,
         setUser,

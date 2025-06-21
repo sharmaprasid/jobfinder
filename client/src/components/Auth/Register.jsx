@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useContext, useState } from "react";
+import { useContext, useState } from "react";
 import toast from "react-hot-toast";
 import { FaPencilAlt, FaRegUser } from "react-icons/fa";
 import { FaPhoneFlip } from "react-icons/fa6";
@@ -21,7 +21,7 @@ const Register = () => {
   const [industry, setIndustry] = useState("");
   const [website, setWebsite] = useState("");
 
-  const { isAuthorized, setIsAuthorized, user, setUser } = useContext(Context);
+  const { isAuthorized, setIsAuthorized } = useContext(Context);
 
   const handleRegister = async (e) => {
     e.preventDefault();
@@ -46,7 +46,7 @@ const Register = () => {
 
     try {
       const { data } = await axios.post(
-        `https://jobfinderserver.vercel.app/api/v1/user/register`,
+        `${import.meta.env.VITE_APP_API_URL}/user/register`,
         userData,
         {
           headers: { "Content-Type": "application/json" },
@@ -70,7 +70,7 @@ const Register = () => {
   };
 
   if (isAuthorized) {
-    return <Navigate to={'/'} />;
+    return <Navigate to="/" />;
   }
 
   return (

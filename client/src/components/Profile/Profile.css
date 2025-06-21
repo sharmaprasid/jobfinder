@@ -1,0 +1,104 @@
+.profile.page .container {
+  max-width: 700px;
+  margin: 2rem auto;
+  padding: 1rem 2rem;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 3px 15px rgb(0 0 0 / 0.1);
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.profile.page h2 {
+  margin-bottom: 1.5rem;
+  color: #222;
+  font-weight: 700;
+  text-align: center;
+}
+
+.profile-info {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.profile-info h3 {
+  margin-top: 2rem;
+  color: #555;
+  font-weight: 600;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 0.3rem;
+}
+
+.profile-info label {
+  font-weight: 600;
+  color: #333;
+}
+
+.text-field {
+  margin-top: 0.3rem;
+  font-size: 1rem;
+  color: #444;
+}
+
+.input-field {
+  margin-top: 0.3rem;
+  padding: 8px 12px;
+  font-size: 1rem;
+  border: 1.5px solid #ccc;
+  border-radius: 6px;
+  transition: border-color 0.3s ease;
+  width: 100%;
+}
+
+.input-field:focus {
+  outline: none;
+  border-color: #007bff;
+}
+
+.profile-actions {
+  margin-top: 2rem;
+  text-align: center;
+}
+
+.btn {
+  padding: 10px 25px;
+  border: none;
+  border-radius: 7px;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 1rem;
+  margin: 0 0.5rem;
+  transition: background-color 0.3s ease;
+  color: #fff;
+}
+
+.edit-btn {
+  background-color: #007bff;
+}
+
+.edit-btn:hover {
+  background-color: #0056b3;
+}
+
+.save-btn {
+  background-color: #28a745;
+}
+
+.save-btn:hover {
+  background-color: #1e7e34;
+}
+
+.cancel-btn {
+  background-color: #dc3545;
+}
+
+.cancel-btn:hover {
+  background-color: #a71d2a;
+}
+
+.loading-text {
+  text-align: center;
+  font-size: 1.2rem;
+  color: #666;
+  margin-top: 3rem;
+}

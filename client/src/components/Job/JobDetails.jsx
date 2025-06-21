@@ -1,7 +1,6 @@
-import React, { useContext, useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useContext, useEffect, useState } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { Context } from "../../main";
 const JobDetails = () => {
   const { id } = useParams();
@@ -12,7 +11,7 @@ const JobDetails = () => {
 
   useEffect(() => {
     axios
-      .get(`https://jobfinderserver.vercel.app/api/v1/job/${id}`, {
+      .get(`${import.meta.env.VITE_APP_API_URL}/job/${id}`, {
         withCredentials: true,
       })
       .then((res) => {

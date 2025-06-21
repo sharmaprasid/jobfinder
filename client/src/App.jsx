@@ -1,60 +1,39 @@
-import React, { useContext, useEffect } from "react";
-import "./App.css";
-import { Context } from "./main";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Login from "./components/Auth/Login";
-import Register from "./components/Auth/Register";
-import { Toaster } from "react-hot-toast";
 import axios from "axios";
-import Navbar from "./components/Layout/Navbar";
-import Footer from "./components/Layout/Footer";
-import Home from "./components/Home/Home";
-import Jobs from "./components/Job/Jobs";
-import JobDetails from "./components/Job/JobDetails";
+import { useContext, useEffect } from "react";
+import { Toaster } from "react-hot-toast";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import "./App.css";
 import Application from "./components/Application/Application";
 import MyApplications from "./components/Application/MyApplications";
-import PostJob from "./components/Job/PostJob";
-import NotFound from "./components/NotFound/NotFound";
+import Login from "./components/Auth/Login";
+import Register from "./components/Auth/Register";
+import Home from "./components/Home/Home";
+import JobDetails from "./components/Job/JobDetails";
+import Jobs from "./components/Job/Jobs";
 import MyJobs from "./components/Job/MyJobs";
+import PostJob from "./components/Job/PostJob";
+import Footer from "./components/Layout/Footer";
+import Navbar from "./components/Layout/Navbar";
+import NotFound from "./components/NotFound/NotFound";
+import { Context } from "./main";
+import Profile from "./components/profile/Profile";
 
 const App = () => {
   const { isAuthorized, setIsAuthorized, setUser } = useContext(Context);
-  // useEffect(() => {
-  //   const fetchUser = async () => {
-  //     try {
-  //       const response = await axios.get(
-  //         "https://jobfinderserver.vercel.app/api/v1/user/getuser",
-  //         {
-  //           withCredentials: true,
-  //         }
-  //       );
-  //       setUser(response.data.user);
-  //       setIsAuthorized(true);
-  //     } catch (error) {
-  //       setIsAuthorized(false);
-  //     }
-  //   };
-  //   fetchUser();
-  // }, [isAuthorized]);
   useEffect(() => {
-  const fetchUser = async () => {
-    try {
-      const response = await axios.get(
-        "https://jobfinderserver.vercel.app/api/v1/user/getuser",
-        {
+    const fetchUser = async () => {
+      try {
+        const response = await axios.get(`${import.meta.env.VITE_APP_API_URL}/user/getuser`, {
           withCredentials: true,
-        }
-      );
-      setUser(response.data.user);
-      setIsAuthorized(true);
-    } catch (error) {
-      setIsAuthorized(false);
-    }
-  };
-
-  fetchUser();
-}, [isAuthorized]); // run only once on app mount
-
+        });
+        setUser(response.data.user);
+        setIsAuthorized(true);
+      } catch (error) {
+        setIsAuthorized(false);
+      }
+    };
+    fetchUser();
+  }, [isAuthorized]);
 
   return (
     <>
@@ -63,6 +42,7 @@ const App = () => {
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/profile" element={<Profile />} />
           <Route path="/" element={<Home />} />
           <Route path="/job/getall" element={<Jobs />} />
           <Route path="/job/:id" element={<JobDetails />} />

@@ -1,102 +1,90 @@
 import axios from "axios";
-import React, { useContext, useState } from "react";
+import { useContext, useState } from "react";
 import toast from "react-hot-toast";
 import { useNavigate, useParams } from "react-router-dom";
 import { Context } from "../../main";
 
 const Application = () => {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [coverLetter, setCoverLetter] = useState("");
-  const [phone, setPhone] = useState("");
-  const [address, setAddress] = useState("");
-  const [resume, setResume] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [fileError, setFileError] = useState("");
-
   const { isAuthorized, user } = useContext(Context);
   const navigateTo = useNavigate();
   const { id } = useParams();
 
-  // Function to handle file input changes with validation
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    address: "",
+    coverLetter: "",
+  });
+  const [resume, setResume] = useState(null);
+  const [fileError, setFileError] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     setFileError("");
-    
-    if (!file) {
-      setResume(null);
-      return;
-    }
-    
-    // Check file type
+
+    if (!file) return setResume(null);
+
     const allowedTypes = ["image/png", "image/jpeg", "image/webp"];
     if (!allowedTypes.includes(file.type)) {
-      setFileError("Please select a valid image file (PNG, JPEG, or WEBP)");
-      setResume(null);
-      return;
+      setFileError("Please select a PNG, JPEG, or WEBP file.");
+      return setResume(null);
     }
-    
-    // Check file size (limit to 2MB)
+
     if (file.size > 2 * 1024 * 1024) {
-      setFileError("File size should be less than 2MB");
-      setResume(null);
-      return;
+      setFileError("File must be less than 2MB.");
+      return setResume(null);
     }
-    
+
     setResume(file);
   };
 
   const handleApplication = async (e) => {
     e.preventDefault();
-    
-    // Validate form
+
+    const { name, email, phone, address, coverLetter } = formData;
     if (!name || !email || !phone || !address || !coverLetter) {
-      toast.error("Please fill in all fields");
+      toast.error("Please fill in all fields.");
       return;
     }
-    
+
     if (!resume) {
-      setFileError("Please upload your resume");
+      setFileError("Resume is required.");
       return;
     }
-    
+
     setLoading(true);
-    const formData = new FormData();
-    formData.append("name", name);
-    formData.append("email", email);
-    formData.append("phone", phone);
-    formData.append("address", address);
-    formData.append("coverLetter", coverLetter);
-    formData.append("resume", resume);
-    formData.append("jobId", id);
+
+    const submission = new FormData();
+    Object.entries(formData).forEach(([key, value]) => submission.append(key, value));
+    submission.append("resume", resume);
+    submission.append("jobId", id);
 
     try {
       const { data } = await axios.post(
-        "https://jobfinderserver.vercel.app/api/v1/application/post",
-        formData,
+        `${import.meta.env.VITE_APP_API_URL}/application/post`,
+        submission,
         {
           withCredentials: true,
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
+          headers: { "Content-Type": "multipart/form-data" },
         }
       );
-      setName("");
-      setEmail("");
-      setCoverLetter("");
-      setPhone("");
-      setAddress("");
-      setResume(null);
+
       toast.success(data.message);
+      setFormData({ name: "", email: "", phone: "", address: "", coverLetter: "" });
+      setResume(null);
       navigateTo("/job/getall");
     } catch (error) {
-      const errorMessage = error.response?.data?.message || 
-        "Something went wrong. Please try again later.";
-      toast.error(errorMessage);
-      
-      // Show specific message for Cloudinary errors
-      if (errorMessage.includes("Cloudinary") || errorMessage.includes("api_key")) {
-        toast.error("File upload service is currently unavailable. Please try again later.");
+      const msg = error.response?.data?.message || "Something went wrong. Please try again later.";
+      toast.error(msg);
+      if (msg.includes("Cloudinary") || msg.includes("api_key")) {
+        toast.error("Resume upload service temporarily unavailable.");
       }
     } finally {
       setLoading(false);
@@ -110,71 +98,52 @@ const Application = () => {
   return (
     <section className="application">
       <div className="container">
-        <h3>Application Form</h3>
-        <form onSubmit={handleApplication}>
+        <h2 className="form-title">Apply for this job</h2>
+        <form className="application-form" onSubmit={handleApplication}>
           <input
             type="text"
+            name="name"
             placeholder="Your Name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            required
+            value={formData.name}
+            onChange={handleInputChange}
           />
           <input
             type="email"
+            name="email"
             placeholder="Your Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-          <input
-            type="number"
-            placeholder="Your Phone Number"
-            value={phone}
-            onChange={(e) => setPhone(e.target.value)}
-            required
+            value={formData.email}
+            onChange={handleInputChange}
           />
           <input
             type="text"
+            name="phone"
+            placeholder="Your Phone Number"
+            value={formData.phone}
+            onChange={handleInputChange}
+          />
+          <input
+            type="text"
+            name="address"
             placeholder="Your Address"
-            value={address}
-            onChange={(e) => setAddress(e.target.value)}
-            required
+            value={formData.address}
+            onChange={handleInputChange}
           />
           <textarea
-            placeholder="Cover Letter..."
-            value={coverLetter}
-            onChange={(e) => setCoverLetter(e.target.value)}
-            required
+            name="coverLetter"
+            rows="4"
+            placeholder="Write your cover letter..."
+            value={formData.coverLetter}
+            onChange={handleInputChange}
           />
-          <div>
-            <label
-              style={{ textAlign: "start", display: "block", fontSize: "20px" }}
-            >
-              Upload Resume 
-              <p style={{ color: "red", fontSize: "12px", margin: "5px 0 0 0" }}>
-                (Supported formats: PNG, JPEG, WEBP. Max size: 2MB)
-              </p>
-            </label>
-            <input
-              type="file"
-              accept=".png,.jpg,.jpeg,.webp"
-              onChange={handleFileChange}
-              style={{ width: "100%" }}
-            />
-            {fileError && (
-              <p style={{ color: "red", fontSize: "14px", marginTop: "5px" }}>
-                {fileError}
-              </p>
-            )}
-          </div>
-          <button 
-            type="submit" 
-            disabled={loading}
-            style={{ 
-              opacity: loading ? 0.7 : 1,
-              cursor: loading ? "not-allowed" : "pointer" 
-            }}
-          >
+
+          <label className="resume-label">
+            Upload Resume
+            <span className="hint">(PNG, JPEG, WEBP • Max 2MB)</span>
+            <input type="file" onChange={handleFileChange} accept="image/*" />
+          </label>
+          {fileError && <p className="error-msg">{fileError}</p>}
+
+          <button type="submit" disabled={loading} className="submit-btn">
             {loading ? "Submitting..." : "Send Application"}
           </button>
         </form>

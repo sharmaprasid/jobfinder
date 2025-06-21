@@ -1,7 +1,6 @@
-import React from "react";
 import { useContext } from "react";
-import { Context } from "../../main";
 import { Navigate } from "react-router-dom";
+import { Context } from "../../main";
 import HeroSection from "./HeroSection";
 import HowItWorks from "./HowItWorks";
 import PopularCategories from "./PopularCategories";

@@ -1,10 +1,10 @@
-import React, { useContext, useState, useEffect } from "react";
+import axios from "axios";
+import { useContext, useEffect, useState } from "react";
+import toast from "react-hot-toast";
+import { FaRegUser } from "react-icons/fa";
 import { MdOutlineMailOutline } from "react-icons/md";
 import { RiLock2Fill } from "react-icons/ri";
 import { Link, useNavigate } from "react-router-dom";
-import { FaRegUser } from "react-icons/fa";
-import axios from "axios";
-import toast from "react-hot-toast";
 import { Context } from "../../main";
 
 const Login = () => {
@@ -17,7 +17,7 @@ const Login = () => {
 
   useEffect(() => {
     if (isAuthorized) {
-      navigate("/"); 
+      navigate("/");
     }
   }, [isAuthorized, navigate]);
 
@@ -27,7 +27,7 @@ const Login = () => {
 
     try {
       const { data } = await axios.post(
-        "https://jobfinderserver.vercel.app/api/v1/user/login",
+        `${import.meta.env.VITE_APP_API_URL}/user/login`,
         { email, password, role },
         {
           headers: {

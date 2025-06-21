@@ -1,8 +1,9 @@
 import axios from "axios";
-import React, { useContext, useState } from "react";
+import { useContext, useState } from "react";
 import toast from "react-hot-toast";
 import { AiOutlineClose } from "react-icons/ai"; // Import the close icon
 import { GiHamburgerMenu } from "react-icons/gi";
+import { RxAvatar } from "react-icons/rx";
 import { Link, useNavigate } from "react-router-dom";
 import { Context } from "../../main";
 
@@ -13,7 +14,7 @@ const Navbar = () => {
 
   const handleLogout = async () => {
     try {
-      const response = await axios.get(`https://jobfinderserver.vercel.app/api/v1/user/logout`, {
+      const response = await axios.get(`${import.meta.env.VITE_APP_API_URL}/user/logout`, {
         withCredentials: true,
       });
       toast.success(response.data.message);
@@ -23,6 +24,9 @@ const Navbar = () => {
       toast.error(error.response.data.message), setIsAuthorized(true);
     }
   };
+
+  const AvatarIcon =
+    user && user.avatar ? <img src={user.avatar} alt="Profile" /> : <RxAvatar size={40} />;
 
   return (
     <nav className={isAuthorized ? "navbarShow" : "navbarHide"}>
@@ -60,6 +64,20 @@ const Navbar = () => {
               </li>
             </>
           ) : null}
+
+          <li>
+            {/* Profile Avatar with link to /profile */}
+            {user && (
+              <Link
+                id="profile"
+                to="/profile"
+                onClick={() => setShow(false)}
+                className="profile-avatar"
+              >
+                <div className="avatar">{AvatarIcon}</div>
+              </Link>
+            )}
+          </li>
 
           <button onClick={handleLogout}>LOGOUT</button>
         </ul>
