@@ -23,8 +23,9 @@ cloudinary.v2.config({
 
 app.use(
   cors({
-    origin: [process.env.FRONTEND_URL],
-    method: ["GET", "POST", "DELETE", "PUT"],
+    origin: 'https://jobfinder-frontend-beta.vercel.app', // Replace with your frontend URL
+    methods: ["GET", "POST", "DELETE", "PUT", "OPTIONS"],
+    
     credentials: true,
   })
 );
