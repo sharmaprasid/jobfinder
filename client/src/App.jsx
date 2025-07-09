@@ -1,3 +1,4 @@
+// App.jsx
 import axios from "axios";
 import React, { useContext, useEffect } from "react";
 import { Toaster } from "react-hot-toast";
@@ -18,22 +19,35 @@ import NotFound from "./components/NotFound/NotFound";
 import { Context } from "./main";
 import Profile from "./components/Profile/Profile";
 
+// Configure axios defaults
+axios.defaults.withCredentials = true;
+
 const App = () => {
   const { isAuthorized, setIsAuthorized, setUser } = useContext(Context);
+
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const response = await axios.get(`https://jobfinderserver.vercel.app/api/v1/user/getuser`, {
-          withCredentials: true,
-        });
+        const response = await axios.get(
+          `https://jobfinderserver.vercel.app/api/v1/user/getuser`,
+          {
+            withCredentials: true,
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          }
+        );
         setUser(response.data.user);
         setIsAuthorized(true);
       } catch (error) {
+        console.error("Auth error:", error);
         setIsAuthorized(false);
+        setUser(null);
       }
     };
+
     fetchUser();
-  }, [isAuthorized]);
+  }, [isAuthorized, setIsAuthorized, setUser]);
 
   return (
     <>
