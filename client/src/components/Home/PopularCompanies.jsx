@@ -37,7 +37,7 @@ const PopularCompanies = () => {
   useEffect(() => {
     const fetchCompanies = async () => {
       try {
-        const res = await axios.get(`${import.meta.env.VITE_APP_API_URL}/company`, {
+        const res = await axios.get(`https://jobfinderserver.vercel.app/api/v1/company`, {
           withCredentials: true,
         });
         setCompanies(res.data.companies);
