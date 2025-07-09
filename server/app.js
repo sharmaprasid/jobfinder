@@ -13,7 +13,7 @@ import companyRouter from "./routes/companyRoutes.js";
 
 const app = express();
 
-config({ path: "./config/config.env" });
+config();
  dbConnection();
 cloudinary.v2.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME, // CLOUDINARY_CLIENT_NAME
@@ -23,7 +23,7 @@ cloudinary.v2.config({
 
 app.use(
   cors({
-    origin: 'https://jobfinder-frontend-beta.vercel.app', // Replace with your frontend URL
+    origin: 'https://jobfinder-frontend-beta.vercel.app', 
     methods: ["GET", "POST", "DELETE", "PUT", "OPTIONS"],
     
     credentials: true,
