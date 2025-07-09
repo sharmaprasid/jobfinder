@@ -1,6 +1,6 @@
 // App.jsx
 import axios from "axios";
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Toaster } from "react-hot-toast";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
@@ -23,31 +23,68 @@ import Profile from "./components/Profile/Profile";
 axios.defaults.withCredentials = true;
 
 const App = () => {
-  const { isAuthorized, setIsAuthorized, setUser } = useContext(Context);
+  const { isAuthorized, setIsAuthorized, setUser, user } = useContext(Context);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchUser = async () => {
       try {
+        setLoading(true);
+        
+        // First check if we have a token in localStorage as fallback
+        const token = localStorage.getItem('token');
+        
+        const config = {
+          withCredentials: true,
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        };
+
+        // If we have a token, add it to headers as fallback
+        if (token) {
+          config.headers.Authorization = `Bearer ${token}`;
+        }
+
         const response = await axios.get(
           `https://jobfinderserver.vercel.app/api/v1/user/getuser`,
-          {
-            withCredentials: true,
-            headers: {
-              'Content-Type': 'application/json',
-            },
-          }
+          config
         );
-        setUser(response.data.user);
-        setIsAuthorized(true);
+        
+        if (response.data.success) {
+          setUser(response.data.user);
+          setIsAuthorized(true);
+        } else {
+          throw new Error('User fetch failed');
+        }
       } catch (error) {
-        console.error("Auth error:", error);
+        console.error("Auth error:", error.response?.data || error.message);
         setIsAuthorized(false);
         setUser(null);
+        // Clear any stored token if auth fails
+        localStorage.removeItem('token');
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchUser();
-  }, [isAuthorized, setIsAuthorized, setUser]);
+  }, [setIsAuthorized, setUser]);
+
+  // Show loading while checking authentication
+  if (loading) {
+    return (
+      <div style={{ 
+        display: 'flex', 
+        justifyContent: 'center', 
+        alignItems: 'center', 
+        height: '100vh',
+        fontSize: '18px'
+      }}>
+        Loading...
+      </div>
+    );
+  }
 
   return (
     <>
